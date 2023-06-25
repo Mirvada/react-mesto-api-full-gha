@@ -1,0 +1,14 @@
+.header__user-zone {
+  margin-right: 30px;
+  padding-bottom: 15px;
+  display: flex;
+  align-items: center;
+  gap: 24px;
+}
+
+@media screen and (max-width: 500px) {
+  .header__user-zone {
+    flex-direction: column;
+    gap: 10px;
+  }
+}
