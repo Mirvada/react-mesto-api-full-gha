@@ -1,19 +1,19 @@
-import React, {useDebugValue, useEffect, useState} from "react";
-import Footer from "./Footer.jsx";
-import Header from "./Header.jsx";
-import ImagePopup from "./ImagePopup.jsx";
-import Main from "./Main.jsx";
-import { api } from "../utils/Api.js";
-import { CurrentUserContext } from "../contexts/CurrentUserContext.jsx";
-import EditProfilePopup from "./EditProfilePopup.jsx";
-import EditAvatarPopup from "./EditAvatarPopup.jsx";
-import AddPlacePopup from "./AddPlacePopup.jsx";
-import { Routes, Route, useNavigate } from "react-router-dom";
-import Register from "./Register.jsx";
-import Login from "./Login.jsx";
-import ProtectedRoute from "./ProtectedRoute.jsx";
-import InfoTooltip from "./InfoTooltip.jsx";
-import * as auth from "../utils/auth.js";
+import React, { useEffect, useState } from 'react';
+import Footer from './Footer.jsx';
+import Header from './Header.jsx';
+import ImagePopup from './ImagePopup.jsx';
+import Main from './Main.jsx';
+import { api } from '../utils/Api.js';
+import { CurrentUserContext } from '../contexts/CurrentUserContext.jsx';
+import EditProfilePopup from './EditProfilePopup.jsx';
+import EditAvatarPopup from './EditAvatarPopup.jsx';
+import AddPlacePopup from './AddPlacePopup.jsx';
+import { Routes, Route, useNavigate } from 'react-router-dom';
+import Register from './Register.jsx';
+import Login from './Login.jsx';
+import ProtectedRoute from './ProtectedRoute.jsx';
+import InfoTooltip from './InfoTooltip.jsx';
+import * as auth from '../utils/auth.js';
 
 function App() {
   const [isEditProfilePopupOpen, setIsEditProfilePopupOpen] = useState(false);
@@ -26,7 +26,7 @@ function App() {
   const [loggedIn, setLoggedIn] = useState(false);
   const [isInfoTooltipPopupOpen, setIsInfoTooltipPopupOpen] = useState(false);
   const [isError, setError] = useState(false);
-  const [userEmail, setUserEmail] = useState("");
+  const [userEmail, setUserEmail] = useState('');
   const [isLoading, setIsLoading] = React.useState(false);
   const navigate = useNavigate();
 
@@ -45,21 +45,25 @@ function App() {
     checkToken();
   }, []);
 
-  const isOpen = isEditAvatarPopupOpen || isEditProfilePopupOpen || isAddPlacePopupOpen || isImgPopupOpen;
+  const isOpen =
+    isEditAvatarPopupOpen ||
+    isEditProfilePopupOpen ||
+    isAddPlacePopupOpen ||
+    isImgPopupOpen;
 
   useEffect(() => {
     function closeByEscape(evt) {
-      if(evt.key === 'Escape') {
+      if (evt.key === 'Escape') {
         closeAllPopups();
       }
     }
-    if(isOpen) {
+    if (isOpen) {
       document.addEventListener('keydown', closeByEscape);
       return () => {
         document.removeEventListener('keydown', closeByEscape);
-      }
+      };
     }
-  }, [isOpen])
+  }, [isOpen]);
 
   function handleCardClick(cardData) {
     setSelectedCard(cardData);
@@ -113,7 +117,7 @@ function App() {
   }
 
   function handleUpdateUser(user) {
-    setIsLoading(true)
+    setIsLoading(true);
     api
       .sendEditedUserData(user)
       .then((user) => {
@@ -121,11 +125,11 @@ function App() {
         closeAllPopups();
       })
       .catch((err) => console.log(`ошибка: ${err}`))
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoading(false));
   }
 
   function handleUpdateAvatar({ avatar }) {
-    setIsLoading(true)
+    setIsLoading(true);
     api
       .updateAvatar({ avatar })
       .then((avatar) => {
@@ -133,11 +137,11 @@ function App() {
         closeAllPopups();
       })
       .catch((err) => console.log(`ошибка: ${err}`))
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoading(false));
   }
 
   function handleAddPlaceSubmit(card) {
-    setIsLoading(true)
+    setIsLoading(true);
     api
       .addCard(card)
       .then((newCard) => {
@@ -145,7 +149,7 @@ function App() {
         closeAllPopups();
       })
       .catch((err) => console.log(`ошибка: ${err}`))
-      .finally(() => setIsLoading(false))
+      .finally(() => setIsLoading(false));
   }
 
   function handleRegister({ password, email }) {
@@ -153,7 +157,7 @@ function App() {
       .register({ password, email })
       .then(() => {
         setError(false);
-        navigate("/signin");
+        navigate('/signin');
       })
       .catch(() => {
         setError(true);
@@ -168,10 +172,10 @@ function App() {
       .authorization({ password, email })
       .then((data) => {
         if (data.token) {
-          localStorage.setItem("jwt", data.token);
+          localStorage.setItem('jwt', data.token);
           setLoggedIn(true);
           setUserEmail(email);
-          navigate("/", { replace: true });
+          navigate('/', { replace: true });
         }
       })
       .catch(() => {
@@ -181,22 +185,22 @@ function App() {
   }
 
   function handleLogout() {
-    localStorage.removeItem("jwt");
+    localStorage.removeItem('jwt');
     setLoggedIn(false);
     setCurrentUser({});
-    setUserEmail("");
-    navigate("/signin", { replace: true });
+    setUserEmail('');
+    navigate('/signin', { replace: true });
   }
 
   function checkToken() {
-    const jwt = localStorage.getItem("jwt");
+    const jwt = localStorage.getItem('jwt');
     if (jwt) {
       auth
         .getContent(jwt)
         .then((user) => {
           setUserEmail(user.data.email);
           setLoggedIn(true);
-          navigate("/", { replace: true });
+          navigate('/', { replace: true });
         })
         .catch(() => {
           setError(true);
@@ -213,13 +217,13 @@ function App() {
         onSignOut={handleLogout}
       />
       <Routes>
-        <Route path="/signin" element={<Login onLogin={handleLogin} />} />
+        <Route path='/signin' element={<Login onLogin={handleLogin} />} />
         <Route
-          path="/signup"
+          path='/signup'
           element={<Register onRegister={handleRegister} />}
         />
         <Route
-          path="/"
+          path='/'
           element={
             <ProtectedRoute
               loggedIn={loggedIn}
