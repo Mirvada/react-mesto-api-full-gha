@@ -14,9 +14,12 @@ class Api {
     return Promise.reject(`Ошибка: ${res.status}`);
   }
 
-  getUserInfo() {
+  getUserInfo(jwt) {
     return fetch(`${this._link}/users/me`, {
-      headers: this._headers,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json'
+      }
     })
       .then(res => this._checkResponse(res))
   }
@@ -42,9 +45,12 @@ class Api {
       .then(res => this._checkResponse(res))
   }
 
-  getInitialCards() {
+  getInitialCards(jwt) {
     return fetch(`${this._link}/cards`, {
-      headers: this._headers,
+      headers: {
+        Authorization: `Bearer ${jwt}`,
+        'Content-Type': 'application/json'
+      }
     })
       .then(res => this._checkResponse(res))
   }

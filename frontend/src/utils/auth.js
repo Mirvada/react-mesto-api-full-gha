@@ -1,4 +1,4 @@
-export const BASE_URL = 'http://api.mesto.sasha.nomoreparties.sbs';
+export const BASE_URL = 'https://api.mesto.sasha.nomoreparties.sbs';
 
 const checkResponse = (res) => {
   if (res.ok) return res.json();
@@ -6,7 +6,6 @@ const checkResponse = (res) => {
 };
 
 export const register = ({ password, email }) => {
-  console.log({ password, email })
   return fetch(`${BASE_URL}/signup`, {
     method: 'POST',
     headers: {

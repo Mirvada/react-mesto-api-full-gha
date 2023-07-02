@@ -32,10 +32,12 @@ function App() {
 
   useEffect(() => {
     if (loggedIn) {
-      Promise.all([api.getUserInfo(), api.getInitialCards()])
+      const jwt = localStorage.getItem('jwt');
+      Promise.all([api.getUserInfo(jwt), api.getInitialCards(jwt)])
         .then(([user, cardList]) => {
-          setCurrentUser(user);
-          setCards(cardList);
+          console.log(user);
+          setCurrentUser(user.data);
+          setCards(cardList.data.reverse());
         })
         .catch((err) => console.log(`ошибка: ${err}`));
     }
@@ -95,13 +97,15 @@ function App() {
   }
 
   function handleCardLike(cardData) {
-    const isLiked = cardData.likes.some((i) => i._id === currentUser._id);
+    const isLiked = cardData.likes.some((i) => i === currentUser._id);
 
     api
       .changeLikeCardStatus(cardData._id, isLiked)
-      .then((newCard) => {
-        setCards((state) =>
-          state.map((c) => (c._id === cardData._id ? newCard : c))
+      .then((likedCard) => {
+        setCards((prevCards) =>
+          prevCards.map((currentCard) =>
+            currentCard._id === cardData._id ? likedCard.data : currentCard
+          )
         );
       })
       .catch((err) => console.log(`ошибка: ${err}`));
@@ -121,7 +125,7 @@ function App() {
     api
       .sendEditedUserData(user)
       .then((user) => {
-        setCurrentUser(user);
+        setCurrentUser(user.data);
         closeAllPopups();
       })
       .catch((err) => console.log(`ошибка: ${err}`))
@@ -132,8 +136,8 @@ function App() {
     setIsLoading(true);
     api
       .updateAvatar({ avatar })
-      .then((avatar) => {
-        setCurrentUser(avatar);
+      .then((res) => {
+        setCurrentUser((prev) => ({ ...prev, avatar: res.data.avatar }));
         closeAllPopups();
       })
       .catch((err) => console.log(`ошибка: ${err}`))
@@ -145,7 +149,7 @@ function App() {
     api
       .addCard(card)
       .then((newCard) => {
-        setCards([newCard, ...cards]);
+        setCards([newCard.data, ...cards]);
         closeAllPopups();
       })
       .catch((err) => console.log(`ошибка: ${err}`))
