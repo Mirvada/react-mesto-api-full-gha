@@ -1,3 +1,4 @@
+require('dotenv').config();
 const express = require('express');
 const mongoose = require('mongoose');
 const helmet = require('helmet');
@@ -7,13 +8,14 @@ const router = require('./routes');
 const handleError = require('./middlewares/handlerError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT = 3000 } = process.env;
+const { PORT } = process.env;
+const { MONGO_DB } = process.env;
 
 const app = express();
 app.use(cors());
 
 mongoose.set('strictQuery', false);
-mongoose.connect('mongodb://127.0.0.1:27017/mestodb', {
+mongoose.connect(MONGO_DB, {
   useUnifiedTopology: true,
   useNewUrlParser: true,
   autoIndex: true,
