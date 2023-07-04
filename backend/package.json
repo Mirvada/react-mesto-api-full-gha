@@ -4,7 +4,6 @@
   "description": "Проект Mesto фронтенд + бэкенд",
   "main": "app.js",
   "scripts": {
-    "lint": "npx eslint .",
     "dev": "nodemon app.js",
     "start": "node app.js"
   },
@@ -20,7 +19,7 @@
   },
   "homepage": "https://github.com/Mirvada/express-mesto-gha#readme",
   "devDependencies": {
-    "eslint": "^8.41.0",
+    "eslint": "^8.44.0",
     "eslint-config-airbnb-base": "^15.0.0",
     "eslint-plugin-import": "^2.27.5",
     "nodemon": "^2.0.22"
