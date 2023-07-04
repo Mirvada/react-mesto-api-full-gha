@@ -97,10 +97,11 @@ function App() {
   }
 
   function handleCardLike(cardData) {
+    const jwt = localStorage.getItem('jwt');
     const isLiked = cardData.likes.some((i) => i === currentUser._id);
 
     api
-      .changeLikeCardStatus(cardData._id, isLiked)
+      .changeLikeCardStatus(cardData._id, isLiked, jwt)
       .then((likedCard) => {
         setCards((prevCards) =>
           prevCards.map((currentCard) =>
@@ -112,8 +113,10 @@ function App() {
   }
 
   function handleCardDelete(cardData) {
+    const jwt = localStorage.getItem('jwt');
+
     api
-      .deleteCard(cardData._id)
+      .deleteCard(cardData._id, jwt)
       .then(() => {
         setCards((cards) => cards.filter((c) => c._id !== cardData._id));
       })
@@ -121,9 +124,11 @@ function App() {
   }
 
   function handleUpdateUser(user) {
+    const jwt = localStorage.getItem('jwt');
+
     setIsLoading(true);
     api
-      .sendEditedUserData(user)
+      .sendEditedUserData(user, jwt)
       .then((user) => {
         setCurrentUser(user.data);
         closeAllPopups();
@@ -133,9 +138,11 @@ function App() {
   }
 
   function handleUpdateAvatar({ avatar }) {
+    const jwt = localStorage.getItem('jwt');
+
     setIsLoading(true);
     api
-      .updateAvatar({ avatar })
+      .updateAvatar({ avatar }, jwt)
       .then((res) => {
         setCurrentUser((prev) => ({ ...prev, avatar: res.data.avatar }));
         closeAllPopups();
@@ -145,9 +152,11 @@ function App() {
   }
 
   function handleAddPlaceSubmit(card) {
+    const jwt = localStorage.getItem('jwt');
+
     setIsLoading(true);
     api
-      .addCard(card)
+      .addCard(card, jwt)
       .then((newCard) => {
         setCards([newCard.data, ...cards]);
         closeAllPopups();
