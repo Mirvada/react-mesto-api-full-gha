@@ -8,8 +8,7 @@ const router = require('./routes');
 const handleError = require('./middlewares/handlerError');
 const { requestLogger, errorLogger } = require('./middlewares/logger');
 
-const { PORT } = process.env;
-const { MONGO_DB } = process.env;
+const { MONGO_DB, PORT } = require('./utils/config');
 
 const app = express();
 app.use(cors());
