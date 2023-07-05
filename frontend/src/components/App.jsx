@@ -35,7 +35,6 @@ function App() {
       const jwt = localStorage.getItem('jwt');
       Promise.all([api.getUserInfo(jwt), api.getInitialCards(jwt)])
         .then(([user, cardList]) => {
-          console.log(user);
           setCurrentUser(user.data);
           setCards(cardList.data.reverse());
         })
