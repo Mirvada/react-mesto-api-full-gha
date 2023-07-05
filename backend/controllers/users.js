@@ -12,21 +12,21 @@ const { NODE_ENV, JWT_SECRET } = process.env;
 
 const getUsers = (req, res, next) => {
   User.find({})
-    .then((users) => res.send(users))
+    .then((users) => res.send({ data: users }))
     .catch((err) => next(err));
 };
 
 const getUser = (req, res, next) => {
   User.findById(req.user._id)
     .orFail(new NotFound('Пользователь по указанному _id не найден.'))
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => next(err));
 };
 
 const getUserById = (req, res, next) => {
   User.findById(req.params.userId)
     .orFail(new NotFound('Пользователь по указанному _id не найден.'))
-    .then((user) => res.send(user))
+    .then((user) => res.send({ data: user }))
     .catch((err) => next(err));
 };
 
@@ -64,7 +64,7 @@ const updateUser = (req, res, next) => {
     },
   )
     .orFail(new NotFound('Пользователь по указанному _id не найден.'))
-    .then((user) => res.status(200).send(user))
+    .then((user) => res.status(200).send({ data: user }))
     .catch((err) => {
       if (err instanceof ValidationError) {
         next(new BadRequest('Переданы некорректные данные'));
@@ -85,7 +85,7 @@ const updateUserAvatar = (req, res, next) => {
   )
     .orFail(new NotFound('Пользователь по указанному _id не найден.'))
     .then((user) => {
-      res.status(200).send(user);
+      res.status(200).send({ data: user });
     })
     .catch((err) => {
       if (err instanceof ValidationError) {

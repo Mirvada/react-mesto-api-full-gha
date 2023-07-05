@@ -8,7 +8,7 @@ const Forbidden = require('../utils/errors/ForbiddenError');
 
 const getCards = (req, res, next) => {
   Card.find({})
-    .then((cards) => res.send(cards))
+    .then((cards) => res.send({ data: cards }))
     .catch((err) => next(err));
 };
 
@@ -16,7 +16,7 @@ const createCard = (req, res, next) => {
   const { name, link } = req.body;
 
   Card.create({ name, link, owner: req.user._id })
-    .then((card) => res.status(201).send(card))
+    .then((card) => res.status(201).send({ data: card }))
     .catch((err) => {
       if (err instanceof ValidationError) {
         next(new BadRequest('Переданы некорректные данные при создании карточки.'));
@@ -34,7 +34,7 @@ const deleteCard = (req, res, next) => {
         return next(new Forbidden('hooi'));
       }
       return Card.deleteOne(card)
-        .then(() => res.status(200).send(card));
+        .then(() => res.status(200).send({ data: card }));
     })
     .catch((err) => {
       if (err instanceof CastError) {
@@ -52,7 +52,7 @@ const likeCard = (req, res, next) => {
     { new: true },
   )
     .orFail(new NotFound('Карточка с указанным _id не найдена.'))
-    .then((card) => res.status(200).send(card))
+    .then((card) => res.status(200).send({ data: card }))
     .catch((err) => {
       if (err instanceof CastError) {
         next(new BadRequest('Переданы некорректные данные для постановки лайка.'));
@@ -69,7 +69,7 @@ const dislikeCard = (req, res, next) => {
     { new: true },
   )
     .orFail(new NotFound('Карточка с указанным _id не найдена.'))
-    .then((card) => res.status(200).send(card))
+    .then((card) => res.status(200).send({ data: card }))
     .catch((err) => {
       if (err instanceof CastError) {
         next(new BadRequest('Переданы некорректные данные для снятии лайка.'));
