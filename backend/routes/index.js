@@ -10,7 +10,7 @@ router.post('/signup', validateUserRegistration, createUser);
 router.use('/users', auth, require('./users'));
 router.use('/cards', auth, require('./cards'));
 
-router.use('*', (req, res, next) => {
+router.use('*', auth, (req, res, next) => {
   next(new NotFoundError('Указанный путь не найден.'));
 });
 
